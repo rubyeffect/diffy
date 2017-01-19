@@ -19,22 +19,22 @@ module Diffy
       cleaned = clean_line(line)
       case line
       when /^(---|\+\+\+|\\\\)/
-        '    <li class="diff-comment"><span>' + line.chomp + '</span></li>'
+        '    <li class="diff-comment" style="display: none;"><span>' + line.chomp + '</span></li>'
       when /^\+/
-        '    <li class="ins"><ins>' + cleaned + '</ins></li>'
+        '    <li class="ins", style="background:#dfd;color:#080;display:block;text-decoration:none;white-space:pre-wrap;"><ins>' + cleaned + '</ins></li>'
       when /^-/
-        '    <li class="del"><del>' + cleaned + '</del></li>'
+        '    <li class="del", style="background:#fee;color:#b00;display:block;text-decoration:none;white-space:pre-wrap;"><del>' + cleaned + '</del></li>'
       when /^ /
         '    <li class="unchanged"><span>' + cleaned + '</span></li>'
       when /^@@/
-        '    <li class="diff-block-info"><span>' + line.chomp + '</span></li>'
+        '    <li class="diff-block-info" style="background: none repeat scroll 0 0 gray;"><span>' + line.chomp + '</span></li>'
       end
     end
 
     # remove +/- or wrap in html
     def clean_line(line)
       if @options[:include_plus_and_minus_in_html]
-        line.sub(/^(.)/, '<span class="symbol">\1</span>')
+        line.sub(/^(.)/, '<span class="symbol" style="white-space:pre-wrap;">\1</span>')
       else
         line.sub(/^./, '')
       end.chomp
@@ -44,7 +44,7 @@ module Diffy
       if lines.empty?
         %'<div class="diff"></div>'
       else
-        %'<div class="diff">\n  <ul>\n#{lines.join("\n")}\n  </ul>\n</div>\n'
+        %'<div class="diff">\n  <ul style="background:#fff;overflow:auto;list-style:none;margin:0;padding:0;display:table;width:100%;">\n#{lines.join("\n")}\n  </ul>\n</div>\n'
       end
     end
 
@@ -118,7 +118,7 @@ module Diffy
     end
 
     def highlight(lines)
-      "<strong>" +
+      "<strong style='font-weight:normal;'>" +
         lines.
           # strip diff tokens (e.g. +,-,etc.)
           gsub(/(^|\\n)./, '').
